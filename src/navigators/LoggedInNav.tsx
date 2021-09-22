@@ -5,10 +5,12 @@ import { Search } from "../screens/Search";
 import { Notifications } from "../screens/Notifications";
 import { Profile } from "../screens/Profile";
 import { Ionicons } from "@expo/vector-icons";
+import { View } from "react-native";
 
 export type RootTabParamList = {
   Feed: undefined;
   Search: undefined;
+  Camera: undefined;
   Notifications: undefined;
   Profile: undefined;
 };
@@ -32,7 +34,11 @@ export const LoggedInNav = () => {
         component={Feed}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="home" color={color} size={focused ? 26 : 22} />
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -41,7 +47,24 @@ export const LoggedInNav = () => {
         component={Search}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="search" color={color} size={focused ? 26 : 22} />
+            <Ionicons
+              name={focused ? "search" : "search-outline"}
+              color={color}
+              size={22}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Camera"
+        component={View}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "camera" : "camera-outline"}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -50,7 +73,11 @@ export const LoggedInNav = () => {
         component={Notifications}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="heart" color={color} size={focused ? 26 : 22} />
+            <Ionicons
+              name={focused ? "heart" : "heart-outline"}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
@@ -59,7 +86,11 @@ export const LoggedInNav = () => {
         component={Profile}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons name="person" color={color} size={focused ? 26 : 22} />
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
+              color={color}
+              size={22}
+            />
           ),
         }}
       />
