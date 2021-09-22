@@ -3,7 +3,7 @@ import React from "react";
 
 // type FeedProps = BottomTabBarProps<RootTabParamList, "Feed">;
 
-export const Feed = () => {
+export const Notifications = () => {
   return (
     <View
       style={{
@@ -13,7 +13,7 @@ export const Feed = () => {
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "white" }}>Feed</Text>
+      <Text style={{ color: "white" }}>Notification</Text>
     </View>
   );
 };
