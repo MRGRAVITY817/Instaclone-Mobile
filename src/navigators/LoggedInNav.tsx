@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { StackNavFactory } from "../components/nav/StackNavFactory";
+import { StackNavFactory } from "./StackNavFactory";
 
 export type RootTabParamList = {
   FeedRoot: undefined;

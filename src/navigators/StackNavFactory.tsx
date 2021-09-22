@@ -1,11 +1,11 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import { Feed } from "../../screens/Feed";
-import { Me } from "../../screens/Me";
-import { Notifications } from "../../screens/Notifications";
-import { Photo } from "../../screens/Photo";
-import { Profile } from "../../screens/Profile";
-import { Search } from "../../screens/Search";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Feed } from "../screens/Feed";
+import { Me } from "../screens/Me";
+import { Notifications } from "../screens/Notifications";
+import { Photo } from "../screens/Photo";
+import { Profile } from "../screens/Profile";
+import { Search } from "../screens/Search";
 
 export type StackNavFactoryParamList = {
   Feed: undefined;
@@ -26,7 +26,16 @@ export const StackNavFactory: React.FC<StackNavFactoryProps> = ({
   screenName,
 }) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTintColor: "white",
+        headerStyle: {
+          shadowColor: "rgba(255,255,255,0.3)",
+          backgroundColor: "black",
+        },
+      }}
+    >
       {screenName === "Feed" ? (
         <Stack.Screen name="Feed" component={Feed} />
       ) : null}

@@ -1,7 +1,11 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavFactoryParamList } from "../navigators/StackNavFactory";
 
-export const Feed = () => {
+type FeedProps = StackScreenProps<StackNavFactoryParamList, "Feed">;
+
+export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   return (
     <View
       style={{
@@ -11,7 +15,9 @@ export const Feed = () => {
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "white" }}>Feed</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Photo")}>
+        <Text style={{ color: "white" }}>Touch Feed Photo</Text>
+      </TouchableOpacity>
     </View>
   );
 };
