@@ -6,6 +6,7 @@ import { Notifications } from "../screens/Notifications";
 import { Photo } from "../screens/Photo";
 import { Profile } from "../screens/Profile";
 import { Search } from "../screens/Search";
+import { Image } from "react-native";
 
 export type StackNavFactoryParamList = {
   Feed: undefined;
@@ -34,10 +35,23 @@ export const StackNavFactory: React.FC<StackNavFactoryProps> = ({
           shadowColor: "rgba(255,255,255,0.3)",
           backgroundColor: "black",
         },
+        headerMode: "screen",
       }}
     >
       {screenName === "Feed" ? (
-        <Stack.Screen name="Feed" component={Feed} />
+        <Stack.Screen
+          name="Feed"
+          component={Feed}
+          options={{
+            headerTitle: () => (
+              <Image
+                style={{ height: 80, width: 200 }}
+                resizeMode="contain"
+                source={require("../../assets/logo.png")}
+              />
+            ),
+          }}
+        />
       ) : null}
       {screenName === "Search" ? (
         <Stack.Screen name="Search" component={Search} />

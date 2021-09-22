@@ -27,10 +27,7 @@ interface LoginFormInput {
   password: string;
 }
 
-export const Login: React.FC<LoginProps> = ({
-  navigation,
-  route: { params },
-}) => {
+export const Login: React.FC<LoginProps> = ({ route: { params } }) => {
   const onCompleted = async (data: LoginMutation) => {
     const { ok, token } = data.login;
     if (ok) {
