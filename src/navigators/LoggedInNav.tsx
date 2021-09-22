@@ -1,18 +1,14 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feed } from "../screens/Feed";
 import React from "react";
-import { Search } from "../screens/Search";
-import { Notifications } from "../screens/Notifications";
-import { Profile } from "../screens/Profile";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { View } from "react-native";
+import { StackNavFactory } from "../components/nav/StackNavFactory";
 
 export type RootTabParamList = {
-  Feed: undefined;
-  Search: undefined;
-  Camera: undefined;
-  Notifications: undefined;
-  Profile: undefined;
+  FeedRoot: undefined;
+  SearchRoot: undefined;
+  PhotoRoot: undefined;
+  NotificationsRoot: undefined;
+  MeRoot: undefined;
 };
 
 const Tabs = createBottomTabNavigator<RootTabParamList>();
@@ -30,8 +26,7 @@ export const LoggedInNav = () => {
       }}
     >
       <Tabs.Screen
-        name="Feed"
-        component={Feed}
+        name="FeedRoot"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -41,10 +36,11 @@ export const LoggedInNav = () => {
             />
           ),
         }}
-      />
+      >
+        {() => <StackNavFactory screenName="Feed" />}
+      </Tabs.Screen>
       <Tabs.Screen
-        name="Search"
-        component={Search}
+        name="SearchRoot"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -54,10 +50,11 @@ export const LoggedInNav = () => {
             />
           ),
         }}
-      />
+      >
+        {() => <StackNavFactory screenName="Search" />}
+      </Tabs.Screen>
       <Tabs.Screen
-        name="Camera"
-        component={View}
+        name="PhotoRoot"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -67,10 +64,11 @@ export const LoggedInNav = () => {
             />
           ),
         }}
-      />
+      >
+        {() => <StackNavFactory screenName="Search" />}
+      </Tabs.Screen>
       <Tabs.Screen
-        name="Notifications"
-        component={Notifications}
+        name="NotificationsRoot"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -80,10 +78,11 @@ export const LoggedInNav = () => {
             />
           ),
         }}
-      />
+      >
+        {() => <StackNavFactory screenName="Notifications" />}
+      </Tabs.Screen>
       <Tabs.Screen
-        name="Profile"
-        component={Profile}
+        name="MeRoot"
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
@@ -93,7 +92,9 @@ export const LoggedInNav = () => {
             />
           ),
         }}
-      />
+      >
+        {() => <StackNavFactory screenName="Me" />}
+      </Tabs.Screen>
     </Tabs.Navigator>
   );
 };

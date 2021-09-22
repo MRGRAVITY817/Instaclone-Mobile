@@ -1,11 +1,11 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { StackNavFactoryParamList } from "../components/nav/StackNavFactory";
 import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavFactoryParamList } from "../components/nav/StackNavFactory";
 
-type SearchProps = StackScreenProps<StackNavFactoryParamList, "Search">;
+type PhotoProps = StackScreenProps<StackNavFactoryParamList, "Photo">;
 
-export const Search: React.FC<SearchProps> = ({ navigation }) => {
+export const Photo: React.FC<PhotoProps> = ({ navigation }) => {
   return (
     <View
       style={{
@@ -15,8 +15,8 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
         justifyContent: "center",
       }}
     >
-      <TouchableOpacity onPress={() => navigation.navigate("Photo")}>
-        <Text style={{ color: "white" }}>Search</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+        <Text style={{ color: "white" }}>Photo</Text>
       </TouchableOpacity>
     </View>
   );

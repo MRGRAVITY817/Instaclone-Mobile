@@ -3,7 +3,7 @@ import React from "react";
 
 // type FeedProps = BottomTabBarProps<RootTabParamList, "Feed">;
 
-export const Profile = () => {
+export const Me = () => {
   return (
     <View
       style={{
@@ -13,7 +13,7 @@ export const Profile = () => {
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "white" }}>Somebody else's Profile</Text>
+      <Text style={{ color: "white" }}>My Profile</Text>
     </View>
   );
 };
