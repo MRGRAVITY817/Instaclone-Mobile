@@ -9,6 +9,17 @@ import { RootTabParamList } from "../navigators/LoggedInNav";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SeeAllFeeds_seeFeed_user } from "../__generated__/SeeAllFeeds";
+import { gql, useMutation } from "@apollo/client";
+import { ToggleLike, ToggleLikeVariables } from "../__generated__/ToggleLike";
+
+const TOGGLE_LIKE = gql`
+  mutation ToggleLike($id: Int!) {
+    toggleLike(id: $id) {
+      ok
+      error
+    }
+  }
+`;
 
 interface PhotoProps {
   id: number;
@@ -80,6 +91,33 @@ export const Photo: React.FC<PhotoProps> = ({
     });
   }, [file]);
 
+  const [toggleLikeMutation] = useMutation<ToggleLike, ToggleLikeVariables>(
+    TOGGLE_LIKE,
+    {
+      variables: { id },
+      update: (cache, result) => {
+        const { ok } = result.data?.toggleLike!;
+        if (ok) {
+          const photoId = `Photo:${id}`;
+          cache.modify({
+            id: photoId,
+            fields: {
+              isLiked(prev) {
+                return !prev;
+              },
+              likes(prev) {
+                if (isLiked) {
+                  return prev - 1;
+                }
+                return prev + 1;
+              },
+            },
+          });
+        }
+      },
+    }
+  );
+
   const navigation = useNavigation<PhotoNavProps>();
 
   return (
@@ -97,7 +135,7 @@ export const Photo: React.FC<PhotoProps> = ({
       />
       <ExtraContainer>
         <Actions>
-          <Action>
+          <Action onPress={() => toggleLikeMutation()}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               color={isLiked ? "tomato" : "white"}

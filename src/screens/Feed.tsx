@@ -2,23 +2,15 @@ import { FlatList } from "react-native";
 import React, { useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
-import { useQuery } from "@apollo/client";
-import { SeeAllFeeds, SeeAllFeeds_seeFeed } from "../__generated__/SeeAllFeeds";
-import { FEED_QUERY } from "../hooks/feed";
+import { SeeAllFeeds_seeFeed } from "../__generated__/SeeAllFeeds";
 import { ScreenLayout } from "../components/ScreenLayout";
 import { Photo } from "../components/Photo";
+import { useSeeFeed } from "../hooks/useSeeFeed";
 
 export type FeedProps = StackScreenProps<SharedStackNavParamList, "Feed">;
 
 export const Feed: React.FC<FeedProps> = ({ navigation }) => {
-  const { data, loading, refetch, fetchMore } = useQuery<SeeAllFeeds>(
-    FEED_QUERY,
-    {
-      variables: {
-        offset: 0,
-      },
-    }
-  );
+  const { data, refetch, fetchMore, loading } = useSeeFeed();
   const renderPhoto = (photo: SeeAllFeeds_seeFeed) => {
     return (
       <Photo
