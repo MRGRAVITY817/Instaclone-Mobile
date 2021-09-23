@@ -11,7 +11,7 @@ import { FEED_QUERY } from "../hooks/feed";
 import { ScreenLayout } from "../components/ScreenLayout";
 import { Photo } from "../components/Photo";
 
-type FeedProps = StackScreenProps<StackNavFactoryParamList, "Feed">;
+export type FeedProps = StackScreenProps<StackNavFactoryParamList, "Feed">;
 
 export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   const { data, loading } = useQuery<SeeAllFeeds>(FEED_QUERY);
