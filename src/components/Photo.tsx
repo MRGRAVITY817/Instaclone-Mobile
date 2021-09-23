@@ -7,12 +7,12 @@ import { Image, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import { RootTabParamList } from "../navigators/LoggedInNav";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
-import { SeeAllFeeds_seeFeed_feeds_user } from "../__generated__/SeeAllFeeds";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SeeAllFeeds_seeFeed_user } from "../__generated__/SeeAllFeeds";
 
 interface PhotoProps {
   id: number;
-  user: SeeAllFeeds_seeFeed_feeds_user;
+  user: SeeAllFeeds_seeFeed_user;
   caption: string;
   file: string;
   isLiked: boolean;
@@ -95,25 +95,27 @@ export const Photo: React.FC<PhotoProps> = ({
         }}
         source={{ uri: file }}
       />
-      <Actions>
-        <Action>
-          <Ionicons
-            name={isLiked ? "heart" : "heart-outline"}
-            color={isLiked ? "tomato" : "white"}
-            size={22}
-          />
-        </Action>
-        <Action onPress={() => navigation.navigate("Comments")}>
-          <Ionicons name="chatbubble-outline" color="white" size={22} />
-        </Action>
-      </Actions>
-      <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
-        <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
-      </TouchableOpacity>
-      <Caption>
-        <Username>{user.username}</Username>
-        <CaptionText>{caption}</CaptionText>
-      </Caption>
+      <ExtraContainer>
+        <Actions>
+          <Action>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              color={isLiked ? "tomato" : "white"}
+              size={22}
+            />
+          </Action>
+          <Action onPress={() => navigation.navigate("Comments")}>
+            <Ionicons name="chatbubble-outline" color="white" size={22} />
+          </Action>
+        </Actions>
+        <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
+          <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
+        </TouchableOpacity>
+        <Caption>
+          <Username>{user.username}</Username>
+          <CaptionText>{caption}</CaptionText>
+        </Caption>
+      </ExtraContainer>
     </Container>
   );
 };

@@ -1,9 +1,9 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { StackNavFactoryParamList } from "../navigators/SharedStackNav";
+import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 
-type PhotoProps = StackScreenProps<StackNavFactoryParamList, "Photo">;
+type PhotoProps = StackScreenProps<SharedStackNavParamList, "Photo">;
 
 export const Photo: React.FC<PhotoProps> = ({ navigation }) => {
   return (

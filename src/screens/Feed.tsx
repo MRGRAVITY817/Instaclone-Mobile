@@ -3,10 +3,7 @@ import React, { useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { useQuery } from "@apollo/client";
-import {
-  SeeAllFeeds,
-  SeeAllFeeds_seeFeed_feeds,
-} from "../__generated__/SeeAllFeeds";
+import { SeeAllFeeds, SeeAllFeeds_seeFeed } from "../__generated__/SeeAllFeeds";
 import { FEED_QUERY } from "../hooks/feed";
 import { ScreenLayout } from "../components/ScreenLayout";
 import { Photo } from "../components/Photo";
@@ -22,7 +19,7 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
       },
     }
   );
-  const renderPhoto = (photo: SeeAllFeeds_seeFeed_feeds) => {
+  const renderPhoto = (photo: SeeAllFeeds_seeFeed) => {
     return (
       <Photo
         id={photo.id}
@@ -45,11 +42,11 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   return (
     <ScreenLayout loading={loading}>
       <FlatList
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.05}
         onEndReached={() =>
           fetchMore({
             variables: {
-              offset: data?.seeFeed.feeds?.length,
+              offset: data?.seeFeed?.length,
             },
           })
         }
@@ -57,8 +54,8 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
         onRefresh={refresh}
         style={{ width: `100%` }}
         showsVerticalScrollIndicator={false}
-        data={data?.seeFeed.feeds as readonly SeeAllFeeds_seeFeed_feeds[]}
-        keyExtractor={(photo: SeeAllFeeds_seeFeed_feeds) => photo.id + ""}
+        data={data?.seeFeed as readonly SeeAllFeeds_seeFeed[]}
+        keyExtractor={(photo: SeeAllFeeds_seeFeed) => photo.id + ""}
         renderItem={({ item }) => renderPhoto(item)}
       />
     </ScreenLayout>
