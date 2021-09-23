@@ -9,6 +9,7 @@ import {
 } from "../__generated__/SeeAllFeeds";
 import { FEED_QUERY } from "../hooks/feed";
 import { ScreenLayout } from "../components/ScreenLayout";
+import { Photo } from "../components/Photo";
 
 type FeedProps = StackScreenProps<StackNavFactoryParamList, "Feed">;
 
@@ -16,15 +17,22 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   const { data, loading } = useQuery<SeeAllFeeds>(FEED_QUERY);
   const renderPhoto = (photo: SeeAllFeeds_seeFeed_feeds) => {
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={{ color: "white" }}>{photo.caption}</Text>
-      </View>
+      <Photo
+        id={photo.id}
+        user={photo.user}
+        caption={photo.caption + ""}
+        file={photo.file}
+        isLiked={photo.isLiked}
+        likes={photo.likes}
+      />
     );
   };
 
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        style={{ width: `100%` }}
+        showsVerticalScrollIndicator={false}
         data={data?.seeFeed.feeds as readonly SeeAllFeeds_seeFeed_feeds[]}
         keyExtractor={(photo: SeeAllFeeds_seeFeed_feeds) => photo.id + ""}
         renderItem={({ item }) => renderPhoto(item)}
