@@ -1,5 +1,5 @@
 import { FlatList, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { useQuery } from "@apollo/client";
@@ -14,7 +14,7 @@ import { Photo } from "../components/Photo";
 export type FeedProps = StackScreenProps<SharedStackNavParamList, "Feed">;
 
 export const Feed: React.FC<FeedProps> = ({ navigation }) => {
-  const { data, loading } = useQuery<SeeAllFeeds>(FEED_QUERY);
+  const { data, loading, refetch } = useQuery<SeeAllFeeds>(FEED_QUERY);
   const renderPhoto = (photo: SeeAllFeeds_seeFeed_feeds) => {
     return (
       <Photo
@@ -28,9 +28,18 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
     );
   };
 
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const refresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        refreshing={refreshing}
+        onRefresh={refresh}
         style={{ width: `100%` }}
         showsVerticalScrollIndicator={false}
         data={data?.seeFeed.feeds as readonly SeeAllFeeds_seeFeed_feeds[]}
