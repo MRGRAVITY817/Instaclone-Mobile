@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import React, { useState } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
@@ -14,7 +14,14 @@ import { Photo } from "../components/Photo";
 export type FeedProps = StackScreenProps<SharedStackNavParamList, "Feed">;
 
 export const Feed: React.FC<FeedProps> = ({ navigation }) => {
-  const { data, loading, refetch } = useQuery<SeeAllFeeds>(FEED_QUERY);
+  const { data, loading, refetch, fetchMore } = useQuery<SeeAllFeeds>(
+    FEED_QUERY,
+    {
+      variables: {
+        offset: 0,
+      },
+    }
+  );
   const renderPhoto = (photo: SeeAllFeeds_seeFeed_feeds) => {
     return (
       <Photo
@@ -38,6 +45,14 @@ export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        onEndReachedThreshold={0}
+        onEndReached={() =>
+          fetchMore({
+            variables: {
+              offset: data?.seeFeed.feeds?.length,
+            },
+          })
+        }
         refreshing={refreshing}
         onRefresh={refresh}
         style={{ width: `100%` }}
