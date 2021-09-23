@@ -1,12 +1,14 @@
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CompositeNavigationProp, useNavigation } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { Image, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import { RootTabParamList } from "../navigators/LoggedInNav";
-import { StackNavFactoryParamList } from "../navigators/StackNavFactory";
+import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { SeeAllFeeds_seeFeed_feeds_user } from "../__generated__/SeeAllFeeds";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface PhotoProps {
   id: number;
@@ -34,17 +36,32 @@ const Username = styled.Text`
   font-weight: 600;
 `;
 const File = styled.Image``;
-const Actions = styled.View``;
-const Action = styled.TouchableOpacity``;
-const Caption = styled.View``;
-const CaptionText = styled.Text``;
+const Actions = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+const Action = styled.TouchableOpacity`
+  margin-right: 10px;
+`;
+const Caption = styled.View`
+  flex-direction: row;
+`;
+const CaptionText = styled.Text`
+  color: white;
+  margin-left: 5px;
+`;
 const Likes = styled.Text`
   color: white;
+  margin: 7px 0px;
+  font-weight: 600;
+`;
+const ExtraContainer = styled.View`
+  padding: 10px;
 `;
 
 type PhotoNavProps = CompositeNavigationProp<
   BottomTabNavigationProp<RootTabParamList, "FeedRoot">,
-  StackNavigationProp<StackNavFactoryParamList>
+  StackNavigationProp<SharedStackNavParamList>
 >;
 
 export const Photo: React.FC<PhotoProps> = ({
@@ -79,10 +96,20 @@ export const Photo: React.FC<PhotoProps> = ({
         source={{ uri: file }}
       />
       <Actions>
-        <Action />
-        <Action />
+        <Action>
+          <Ionicons
+            name={isLiked ? "heart" : "heart-outline"}
+            color={isLiked ? "tomato" : "white"}
+            size={22}
+          />
+        </Action>
+        <Action onPress={() => navigation.navigate("Comments")}>
+          <Ionicons name="chatbubble-outline" color="white" size={22} />
+        </Action>
       </Actions>
-      <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
+      <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
+        <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
+      </TouchableOpacity>
       <Caption>
         <Username>{user.username}</Username>
         <CaptionText>{caption}</CaptionText>

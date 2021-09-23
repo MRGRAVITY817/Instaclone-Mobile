@@ -7,23 +7,27 @@ import { Photo } from "../screens/Photo";
 import { Profile } from "../screens/Profile";
 import { Search } from "../screens/Search";
 import { Image } from "react-native";
+import { Likes } from "../screens/Likes";
+import { Comments } from "../screens/Comment";
 
-export type StackNavFactoryParamList = {
+export type SharedStackNavParamList = {
   Feed: undefined;
   Search: undefined;
   Notifications: undefined;
   Photo: undefined;
   Profile: undefined;
   Me: undefined;
+  Likes: undefined;
+  Comments: undefined;
 };
 
-const Stack = createStackNavigator<StackNavFactoryParamList>();
+const Stack = createStackNavigator<SharedStackNavParamList>();
 
-interface StackNavFactoryProps {
+interface SharedStackNavProps {
   screenName: string;
 }
 
-export const StackNavFactory: React.FC<StackNavFactoryProps> = ({
+export const SharedStackNav: React.FC<SharedStackNavProps> = ({
   screenName,
 }) => {
   return (
@@ -62,6 +66,8 @@ export const StackNavFactory: React.FC<StackNavFactoryProps> = ({
       {screenName === "Me" ? <Stack.Screen name="Me" component={Me} /> : null}
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Photo" component={Photo} />
+      <Stack.Screen name="Likes" component={Likes} />
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 };

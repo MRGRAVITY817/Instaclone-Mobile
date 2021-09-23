@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { StackNavFactory } from "./StackNavFactory";
+import { SharedStackNav } from "./SharedStackNav";
 
 export type RootTabParamList = {
   FeedRoot: undefined;
@@ -37,7 +37,7 @@ export const LoggedInNav = () => {
           ),
         }}
       >
-        {() => <StackNavFactory screenName="Feed" />}
+        {() => <SharedStackNav screenName="Feed" />}
       </Tabs.Screen>
       <Tabs.Screen
         name="SearchRoot"
@@ -51,7 +51,7 @@ export const LoggedInNav = () => {
           ),
         }}
       >
-        {() => <StackNavFactory screenName="Search" />}
+        {() => <SharedStackNav screenName="Search" />}
       </Tabs.Screen>
       <Tabs.Screen
         name="PhotoRoot"
@@ -65,7 +65,7 @@ export const LoggedInNav = () => {
           ),
         }}
       >
-        {() => <StackNavFactory screenName="Search" />}
+        {() => <SharedStackNav screenName="Search" />}
       </Tabs.Screen>
       <Tabs.Screen
         name="NotificationsRoot"
@@ -79,7 +79,7 @@ export const LoggedInNav = () => {
           ),
         }}
       >
-        {() => <StackNavFactory screenName="Notifications" />}
+        {() => <SharedStackNav screenName="Notifications" />}
       </Tabs.Screen>
       <Tabs.Screen
         name="MeRoot"
@@ -93,7 +93,7 @@ export const LoggedInNav = () => {
           ),
         }}
       >
-        {() => <StackNavFactory screenName="Me" />}
+        {() => <SharedStackNav screenName="Me" />}
       </Tabs.Screen>
     </Tabs.Navigator>
   );

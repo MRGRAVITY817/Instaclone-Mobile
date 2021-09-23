@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { StackNavFactoryParamList } from "../navigators/StackNavFactory";
+import { StackNavFactoryParamList } from "../navigators/SharedStackNav";
 import { StackScreenProps } from "@react-navigation/stack";
 
 type SearchProps = StackScreenProps<StackNavFactoryParamList, "Search">;

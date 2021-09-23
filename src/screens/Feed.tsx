@@ -1,7 +1,7 @@
 import { FlatList, Text, View } from "react-native";
 import React from "react";
 import { StackScreenProps } from "@react-navigation/stack";
-import { StackNavFactoryParamList } from "../navigators/StackNavFactory";
+import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { useQuery } from "@apollo/client";
 import {
   SeeAllFeeds,
@@ -11,7 +11,7 @@ import { FEED_QUERY } from "../hooks/feed";
 import { ScreenLayout } from "../components/ScreenLayout";
 import { Photo } from "../components/Photo";
 
-export type FeedProps = StackScreenProps<StackNavFactoryParamList, "Feed">;
+export type FeedProps = StackScreenProps<SharedStackNavParamList, "Feed">;
 
 export const Feed: React.FC<FeedProps> = ({ navigation }) => {
   const { data, loading } = useQuery<SeeAllFeeds>(FEED_QUERY);
