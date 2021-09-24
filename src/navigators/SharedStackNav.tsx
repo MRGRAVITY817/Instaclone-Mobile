@@ -17,7 +17,7 @@ export type SharedStackNavParamList = {
   Photo: undefined;
   Profile: undefined;
   Me: undefined;
-  Likes: undefined;
+  Likes: { photoId: number };
   Comments: undefined;
 };
 
