@@ -120,9 +120,16 @@ export const Photo: React.FC<PhotoProps> = ({
 
   const navigation = useNavigation<PhotoNavProps>();
 
+  const goToProfile = () => {
+    navigation.navigate("Profile", {
+      username: user.username,
+      id: user.id,
+    });
+  };
+
   return (
     <Container>
-      <Header onPress={() => navigation.navigate("Profile")}>
+      <Header onPress={goToProfile}>
         <UserAvatar source={{ uri: user.avatar + "" }} />
         <Username>{user.username}</Username>
       </Header>
@@ -156,7 +163,9 @@ export const Photo: React.FC<PhotoProps> = ({
           <Likes>{likes === 1 ? "1 like" : `${likes} likes`}</Likes>
         </TouchableOpacity>
         <Caption>
-          <Username>{user.username}</Username>
+          <TouchableOpacity onPress={goToProfile}>
+            <Username>{user.username}</Username>
+          </TouchableOpacity>
           <CaptionText>{caption}</CaptionText>
         </Caption>
       </ExtraContainer>

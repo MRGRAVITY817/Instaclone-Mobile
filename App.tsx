@@ -36,6 +36,7 @@ export default function App() {
     await persistCache({
       cache,
       storage: new AsyncStorageWrapper(AsyncStorage),
+      serialize: false, // this will prevent error from changing Graphql Schema during dev env
     });
     await preloadAssets();
   };
