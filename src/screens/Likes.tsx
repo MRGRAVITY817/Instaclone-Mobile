@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import { USER_FRAGMENT } from "../hooks/fragments";
 import {
@@ -40,6 +40,7 @@ export const Likes: React.FC<LikesProps> = ({ route }) => {
       username={item.username}
       isFollowing={item.isFollowing}
       isMe={item.isMe}
+      id={item.id}
     />
   );
   const onRefresh = async () => {
@@ -50,6 +51,15 @@ export const Likes: React.FC<LikesProps> = ({ route }) => {
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              width: `100%`,
+              height: 1,
+              backgroundColor: `rgba(255, 255, 255, 0.2)`,
+            }}
+          />
+        )}
         refreshing={refreshing}
         onRefresh={onRefresh}
         data={data?.seePhotoLikes}
