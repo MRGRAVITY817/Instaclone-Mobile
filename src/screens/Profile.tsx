@@ -1,9 +1,18 @@
 import { Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { StackScreenProps } from "@react-navigation/stack";
+import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 
-// type FeedProps = BottomTabBarProps<RootTabParamList, "Feed">;
+export type ProfileProps = StackScreenProps<SharedStackNavParamList, "Profile">;
 
-export const Profile = () => {
+export const Profile: React.FC<ProfileProps> = ({ navigation, route }) => {
+  useEffect(() => {
+    if (route?.params?.username) {
+      navigation.setOptions({
+        title: route.params.username,
+      });
+    }
+  }, []);
   return (
     <View
       style={{
