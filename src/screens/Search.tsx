@@ -93,7 +93,13 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
 
   const { width } = useWindowDimensions();
   const renderItem = (photo: SearchPhotos_searchPhotos) => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Photo", {
+          photoId: photo.id,
+        })
+      }
+    >
       <Image
         source={{ uri: photo.file }}
         style={{ width: width / numColumns, height: 100 }}
