@@ -6,6 +6,20 @@ import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
 import { TextInput } from "react-native-gesture-handler";
 import { DismissKeyboard } from "../components/DismissKeyboard";
+import { gql, useLazyQuery } from "@apollo/client";
+import {
+  SearchPhotos,
+  SearchPhotosVariables,
+} from "../__generated__/SearchPhotos";
+
+const SEARCH_PHOTOS = gql`
+  query SearchPhotos($keyword: String!) {
+    searchPhotos(keyword: $keyword) {
+      id
+      file
+    }
+  }
+`;
 
 const SearchInput = styled.TextInput``;
 
@@ -16,7 +30,15 @@ interface SearchInputFields {
 type SearchProps = StackScreenProps<SharedStackNavParamList, "Search">;
 
 export const Search: React.FC<SearchProps> = ({ navigation }) => {
-  const { setValue, register } = useForm<SearchInputFields>();
+  const { setValue, register, watch } = useForm<SearchInputFields>();
+  const [searchPhotoQuery, { loading, data }] = useLazyQuery<
+    SearchPhotos,
+    SearchPhotosVariables
+  >(SEARCH_PHOTOS, {
+    variables: {
+      keyword: watch("keyword"),
+    },
+  });
 
   const SearchBox = () => (
     <TextInput
@@ -28,6 +50,7 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
       returnKeyType="search"
       autoCorrect={false}
       onChangeText={(text) => setValue("keyword", text)}
+      onSubmitEditing={() => searchPhotoQuery()}
     />
   );
 
