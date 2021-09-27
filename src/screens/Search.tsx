@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Platform, View } from "react-native";
 import React, { useEffect } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
@@ -21,6 +21,16 @@ const SEARCH_PHOTOS = gql`
   }
 `;
 
+const MessageContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
+const SearchingText = styled.Text`
+  color: white;
+  font-weight: 600;
+  margin-top: 15px;
+`;
 const SearchInput = styled.TextInput``;
 
 interface SearchInputFields {
@@ -30,15 +40,20 @@ interface SearchInputFields {
 type SearchProps = StackScreenProps<SharedStackNavParamList, "Search">;
 
 export const Search: React.FC<SearchProps> = ({ navigation }) => {
-  const { setValue, register, watch } = useForm<SearchInputFields>();
-  const [searchPhotoQuery, { loading, data }] = useLazyQuery<
+  const { setValue, register, handleSubmit } = useForm<SearchInputFields>();
+  const [searchPhotoQuery, { loading, data, called }] = useLazyQuery<
     SearchPhotos,
     SearchPhotosVariables
-  >(SEARCH_PHOTOS, {
-    variables: {
-      keyword: watch("keyword"),
-    },
-  });
+  >(SEARCH_PHOTOS);
+
+  const onValid = ({ keyword }: SearchInputFields) => {
+    console.log(keyword);
+    searchPhotoQuery({
+      variables: {
+        keyword: `#${keyword}`,
+      },
+    });
+  };
 
   const SearchBox = () => (
     <TextInput
@@ -50,7 +65,7 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
       returnKeyType="search"
       autoCorrect={false}
       onChangeText={(text) => setValue("keyword", text)}
-      onSubmitEditing={() => searchPhotoQuery()}
+      onSubmitEditing={handleSubmit(onValid)}
     />
   );
 
@@ -58,22 +73,31 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
     navigation.setOptions({
       headerTitle: SearchBox,
     });
-    register("keyword");
+    register("keyword", {
+      required: true,
+      minLength: 3,
+    });
   }, []);
 
   return (
     <DismissKeyboard>
-      <View
-        style={{
-          backgroundColor: "black",
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.navigate("Photo")}>
-          <Text style={{ color: "white" }}>Photos</Text>
-        </TouchableOpacity>
+      <View style={{ backgroundColor: "black", flex: 1 }}>
+        {loading ? (
+          <MessageContainer>
+            <ActivityIndicator size="large" />
+            <SearchingText>Searching ...</SearchingText>
+          </MessageContainer>
+        ) : null}
+        {!called ? (
+          <MessageContainer>
+            <SearchingText>Searching by keyword</SearchingText>
+          </MessageContainer>
+        ) : null}
+        {data?.searchPhotos !== undefined && data.searchPhotos?.length === 0 ? (
+          <MessageContainer>
+            <SearchingText>Could not find anything</SearchingText>
+          </MessageContainer>
+        ) : null}
       </View>
     </DismissKeyboard>
   );
