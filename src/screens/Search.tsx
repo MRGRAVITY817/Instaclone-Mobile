@@ -1,15 +1,22 @@
-import { ActivityIndicator, Platform, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import React, { useEffect } from "react";
 import { StackScreenProps } from "@react-navigation/stack";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import styled from "styled-components/native";
 import { useForm } from "react-hook-form";
-import { TextInput } from "react-native-gesture-handler";
 import { DismissKeyboard } from "../components/DismissKeyboard";
 import { gql, useLazyQuery } from "@apollo/client";
 import {
   SearchPhotos,
   SearchPhotosVariables,
+  SearchPhotos_searchPhotos,
 } from "../__generated__/SearchPhotos";
 
 const SEARCH_PHOTOS = gql`
@@ -26,12 +33,18 @@ const MessageContainer = styled.View`
   align-items: center;
   flex: 1;
 `;
-const SearchingText = styled.Text`
+const MessageText = styled.Text`
   color: white;
   font-weight: 600;
   margin-top: 15px;
 `;
-const SearchInput = styled.TextInput``;
+const SearchInput = styled.TextInput`
+  background-color: rgba(255, 255, 255, 1);
+  padding: 5px 10px;
+  color: black;
+  border-radius: 10px;
+  width: 250px;
+`;
 
 interface SearchInputFields {
   keyword: string;
@@ -40,6 +53,7 @@ interface SearchInputFields {
 type SearchProps = StackScreenProps<SharedStackNavParamList, "Search">;
 
 export const Search: React.FC<SearchProps> = ({ navigation }) => {
+  const numColumns = 4;
   const { setValue, register, handleSubmit } = useForm<SearchInputFields>();
   const [searchPhotoQuery, { loading, data, called }] = useLazyQuery<
     SearchPhotos,
@@ -47,7 +61,6 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
   >(SEARCH_PHOTOS);
 
   const onValid = ({ keyword }: SearchInputFields) => {
-    console.log(keyword);
     searchPhotoQuery({
       variables: {
         keyword: `#${keyword}`,
@@ -56,9 +69,8 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
   };
 
   const SearchBox = () => (
-    <TextInput
-      style={{ backgroundColor: "white" }}
-      placeholderTextColor="black"
+    <SearchInput
+      placeholderTextColor="rgba(0, 0, 0, 0.6)"
       placeholder="Search photos"
       autoCapitalize="none"
       returnKeyLabel="Search"
@@ -79,24 +91,45 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
     });
   }, []);
 
+  const { width } = useWindowDimensions();
+  const renderItem = (photo: SearchPhotos_searchPhotos) => (
+    <TouchableOpacity>
+      <Image
+        source={{ uri: photo.file }}
+        style={{ width: width / numColumns, height: 100 }}
+      />
+    </TouchableOpacity>
+  );
+
+  console.log(data);
+
   return (
     <DismissKeyboard>
       <View style={{ backgroundColor: "black", flex: 1 }}>
         {loading ? (
           <MessageContainer>
             <ActivityIndicator size="large" />
-            <SearchingText>Searching ...</SearchingText>
+            <MessageText>Searching ...</MessageText>
           </MessageContainer>
         ) : null}
         {!called ? (
           <MessageContainer>
-            <SearchingText>Searching by keyword</SearchingText>
+            <MessageText>Searching by keyword</MessageText>
           </MessageContainer>
         ) : null}
-        {data?.searchPhotos !== undefined && data.searchPhotos?.length === 0 ? (
-          <MessageContainer>
-            <SearchingText>Could not find anything</SearchingText>
-          </MessageContainer>
+        {data?.searchPhotos !== undefined ? (
+          data.searchPhotos?.length === 0 ? (
+            <MessageContainer>
+              <MessageText>Could not find anything</MessageText>
+            </MessageContainer>
+          ) : (
+            <FlatList
+              numColumns={numColumns}
+              data={data.searchPhotos}
+              keyExtractor={(photo) => photo?.id + ""}
+              renderItem={(data) => renderItem(data.item!)}
+            />
+          )
         ) : null}
       </View>
     </DismissKeyboard>
