@@ -2,6 +2,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { SharedStackNav } from "./SharedStackNav";
+import { useMe } from "../hooks/useMe";
+import { Image } from "react-native";
 
 export type RootTabParamList = {
   FeedRoot: undefined;
@@ -14,6 +16,7 @@ export type RootTabParamList = {
 const Tabs = createBottomTabNavigator<RootTabParamList>();
 
 export const LoggedInNav = () => {
+  const { data } = useMe();
   return (
     <Tabs.Navigator
       screenOptions={{
@@ -84,13 +87,27 @@ export const LoggedInNav = () => {
       <Tabs.Screen
         name="MeRoot"
         options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "person" : "person-outline"}
-              color={color}
-              size={22}
-            />
-          ),
+          tabBarIcon: ({ focused, color, size }) =>
+            data?.me?.avatar ? (
+              <Image
+                source={{ uri: data.me.avatar }}
+                style={{
+                  height: 25,
+                  width: 25,
+                  borderRadius: 12.5,
+                  ...(focused && {
+                    borderColor: "rgba(255, 255, 255, 0.3)",
+                    borderWidth: 2,
+                  }),
+                }}
+              />
+            ) : (
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                color={color}
+                size={22}
+              />
+            ),
         }}
       >
         {() => <SharedStackNav screenName="Me" />}
