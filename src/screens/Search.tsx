@@ -107,8 +107,6 @@ export const Search: React.FC<SearchProps> = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  console.log(data);
-
   return (
     <DismissKeyboard>
       <View style={{ backgroundColor: "black", flex: 1 }}>
