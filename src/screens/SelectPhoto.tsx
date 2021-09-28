@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, useWindowDimensions, View } from "react-native";
+import { FlatList, Image, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../colors";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { StackScreenProps } from "@react-navigation/stack";
+import { UploadStackScreen } from "../navigators/UploadNav";
 
 const Container = styled.View`
   flex: 1;
@@ -26,7 +30,16 @@ const IconContainer = styled.View`
   right: 0px;
 `;
 
-export const SelectPhoto = () => {
+const HeaderRightText = styled.Text`
+  color: ${colors.blue};
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 7px;
+`;
+
+type SelectPhotoProps = StackScreenProps<UploadStackScreen, "Select">;
+
+export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const [ok, setOk] = useState<boolean>(false);
   const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
   const [chosenPhoto, setChosenPhoto] = useState<string>("");
@@ -38,6 +51,12 @@ export const SelectPhoto = () => {
       setChosenPhoto(photos[0]?.uri);
     }
   };
+
+  const HeaderRight = () => (
+    <TouchableOpacity>
+      <HeaderRightText>Next</HeaderRightText>
+    </TouchableOpacity>
+  );
 
   const getPermissions = async () => {
     const { accessPrivileges, canAskAgain } =
@@ -65,7 +84,11 @@ export const SelectPhoto = () => {
           style={{ width: width / numColumns, height: 100 }}
         />
         <IconContainer>
-          <Ionicons name="checkmark-circle" size={18} color="white" />
+          <Ionicons
+            name="checkmark-circle"
+            size={18}
+            color={photoUri === chosenPhoto ? colors.blue : "white"}
+          />
         </IconContainer>
       </ImageContainer>
     );
@@ -73,6 +96,12 @@ export const SelectPhoto = () => {
 
   useEffect(() => {
     getPermissions();
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: HeaderRight,
+    });
   }, []);
 
   return (

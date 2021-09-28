@@ -10,7 +10,7 @@ type UploadTabScreen = {
   Take: undefined;
 };
 
-type UploadStackScreen = {
+export type UploadStackScreen = {
   Select: undefined;
 };
 

@@ -5,12 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { Image, useWindowDimensions } from "react-native";
 import styled from "styled-components/native";
-import { RootTabParamList } from "../navigators/LoggedInNav";
 import { SharedStackNavParamList } from "../navigators/SharedStackNav";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SeeAllFeeds_seeFeed_user } from "../__generated__/SeeAllFeeds";
 import { gql, useMutation } from "@apollo/client";
 import { ToggleLike, ToggleLikeVariables } from "../__generated__/ToggleLike";
+import { RootTabParamList } from "../navigators/TabNav";
 
 const TOGGLE_LIKE = gql`
   mutation ToggleLike($id: Int!) {
