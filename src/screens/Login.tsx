@@ -35,7 +35,7 @@ export const Login: React.FC<LoginProps> = ({ route: { params } }) => {
     }
   };
 
-  const [loginMutation, { loading }] = useMutation<
+  const [loginMutation, { loading, error }] = useMutation<
     LoginMutation,
     LoginVariables
   >(LOGIN_MUTATION, { onCompleted });

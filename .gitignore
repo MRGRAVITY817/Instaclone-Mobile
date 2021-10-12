@@ -12,3 +12,6 @@ __generated__/
 
 # macOS
 .DS_Store
+
+# envs
+.env*

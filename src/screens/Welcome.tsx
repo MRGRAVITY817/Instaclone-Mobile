@@ -6,7 +6,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { colors } from "../colors";
 import { AuthLayout } from "../components/auth/AuthLayout";
 import { AuthButton } from "../components/auth/AuthButton";
-import { Text, View } from "react-native";
 
 type WelcomeProps = StackScreenProps<RootStackParamList, "Welcome">;
 
@@ -20,7 +19,8 @@ const LoginLink = styled.Text`
 
 export const Welcome: React.FC<WelcomeProps> = ({ navigation }) => {
   const goToCreateAccount = () => navigation.navigate("CreateAccount");
-  const goToLogin = () => navigation.navigate("Login");
+  const goToLogin = () =>
+    navigation.navigate("Login", { username: "", password: "" });
 
   return (
     <AuthLayout>
