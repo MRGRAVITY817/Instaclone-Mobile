@@ -1,5 +1,5 @@
 import { Camera } from "expo-camera";
-import React, { useEffect, useState } from "react";
+import React, { LegacyRef, useEffect, useRef, useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -46,7 +46,9 @@ const SliderContainer = styled.View``;
 type SelectPhotoProps = StackScreenProps<UploadStackScreen, "Select">;
 
 export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
+  const camera = useRef<Camera>();
   const [ok, setOk] = useState<boolean>(false);
+  const [cameraReady, setCameraReady] = useState<boolean>(false);
   const [flashMode, setFlashMode] = useState<"off" | "on" | "auto">(
     Camera.Constants.FlashMode.off
   );
@@ -85,6 +87,17 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
     }
   };
 
+  const onCameraReady = () => setCameraReady(true);
+
+  const takePhoto = async () => {
+    if (camera.current && cameraReady) {
+      const photo = await camera.current.takePictureAsync({
+        quality: 1,
+        exif: true,
+      });
+    }
+  };
+
   return (
     <Container>
       <StatusBar hidden={true} />
@@ -93,6 +106,8 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
         style={{ flex: 1 }}
         zoom={zoom}
         flashMode={flashMode}
+        ref={camera as LegacyRef<Camera>}
+        onCameraReady={onCameraReady}
       >
         <CloseButton onPress={() => navigation.navigate("Select")}>
           <Ionicons name="close" size={30} color="white" />
@@ -106,12 +121,12 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
             maximumValue={1}
             minimumTrackTintColor="#FFFFFF"
             maximumTrackTintColor="#rgba(255, 255, 255, 0.5)"
-            onValueChange={(e) => onZoomValueChange(e)}
+            onValueChange={onZoomValueChange}
           />
         </SliderContainer>
         <ButtonsContainer>
-          <TakePhotoBtn />
-          <TouchableOpacity onPress={() => onFlashChange()}>
+          <TakePhotoBtn onPress={takePhoto} />
+          <TouchableOpacity onPress={onFlashChange}>
             <Ionicons
               name={
                 flashMode === Camera.Constants.FlashMode.off

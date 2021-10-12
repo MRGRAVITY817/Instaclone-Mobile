@@ -19,7 +19,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
-        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos"
+        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos",
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -28,13 +30,16 @@
       },
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {},
     "plugins": [
       "expo-media-library",
-      "expo-camera"
+      "expo-camera",
+      "expo-file-system"
     ]
   }
 }
