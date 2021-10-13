@@ -108,7 +108,7 @@ export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
     navigation.setOptions({
       headerRight: HeaderRight,
     });
-  }, []);
+  }, [chosenPhoto]);
 
   return (
     <Container>
