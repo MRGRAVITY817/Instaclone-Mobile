@@ -8,7 +8,7 @@ import { AuthTextInput } from "../components/auth/AuthShared";
 import { RootStackParamList } from "../navigators/LoggedOutNav";
 import { gql, useMutation } from "@apollo/client";
 import { Login as LoginMutation, LoginVariables } from "../__generated__/login";
-import { isLoggedInVar, logUserIn } from "../apollo";
+import { logUserIn } from "../apollo";
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
