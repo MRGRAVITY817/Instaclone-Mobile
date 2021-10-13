@@ -7,11 +7,23 @@ import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
 import { StackScreenProps } from "@react-navigation/stack";
 import { UploadStackScreen } from "../navigators/UploadNav";
-import { Image } from "react-native";
+import { Alert, Image } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+
+const Actions = styled.View`
+  flex: 0.35;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0px 50px;
+`;
+
+const PhotoActions = styled(Actions)`
+  flex-direction: row;
+`;
 
 const PhotoAction = styled.TouchableOpacity`
   background-color: white;
-  padding: 5px 10px;
+  padding: 5px 25px;
   border-radius: 4px;
 `;
 
@@ -28,13 +40,6 @@ const CloseButton = styled.TouchableOpacity`
 const Container = styled.View`
   flex: 1;
   background-color: black;
-`;
-
-const Actions = styled.View`
-  flex: 0.35;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0px 50px;
 `;
 
 const ButtonsContainer = styled.View`
@@ -73,6 +78,26 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
     setOk(granted);
   };
 
+  const goToUpload = async (save: boolean) => {
+    if (save) {
+      await MediaLibrary.saveToLibraryAsync(takenPhoto);
+    }
+    console.log("Will upload", takenPhoto);
+  };
+
+  const onUpload = () => {
+    Alert.alert("Save photo?", "Save photo & upload or just upload", [
+      {
+        text: "Save & Upload",
+        onPress: () => goToUpload(true),
+      },
+      {
+        text: "Just Upload",
+        onPress: () => goToUpload(false),
+      },
+    ]);
+  };
+
   const onCameraSwitch = () => {
     if (cameraType === Camera.Constants.Type.front) {
       setCameraType(Camera.Constants.Type.back);
@@ -103,7 +128,6 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
 
   const takePhoto = async () => {
     if (camera.current && cameraReady) {
-      console.log("hello");
       const { uri } = await camera.current.takePictureAsync({
         quality: 1,
         exif: true,
@@ -176,17 +200,14 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
           </ButtonsContainer>
         </Actions>
       ) : (
-        <Actions>
+        <PhotoActions>
           <PhotoAction onPress={onDismiss}>
             <PhotoActionText>Dismiss</PhotoActionText>
           </PhotoAction>
-          <PhotoAction>
+          <PhotoAction onPress={onUpload}>
             <PhotoActionText>Upload</PhotoActionText>
           </PhotoAction>
-          <PhotoAction>
-            <PhotoActionText>Save & Upload</PhotoActionText>
-          </PhotoAction>
-        </Actions>
+        </PhotoActions>
       )}
     </Container>
   );
