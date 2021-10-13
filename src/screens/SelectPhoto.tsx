@@ -7,6 +7,7 @@ import { colors } from "../colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
 import { UploadStackScreen } from "../navigators/UploadNav";
+import { LoggedInStackScreens } from "../navigators/LoggedInNav";
 
 const Container = styled.View`
   flex: 1;
@@ -37,7 +38,7 @@ const HeaderRightText = styled.Text`
   margin-right: 7px;
 `;
 
-type SelectPhotoProps = StackScreenProps<UploadStackScreen, "Select">;
+type SelectPhotoProps = StackScreenProps<LoggedInStackScreens, "Upload">;
 
 export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const [ok, setOk] = useState<boolean>(false);
@@ -45,15 +46,19 @@ export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const [chosenPhoto, setChosenPhoto] = useState<string>("");
 
   const getPhotos = async () => {
-    if (ok) {
-      const { assets: photos } = await MediaLibrary.getAssetsAsync();
-      setPhotos(photos);
-      setChosenPhoto(photos[0]?.uri);
-    }
+    const { assets: photos } = await MediaLibrary.getAssetsAsync();
+    setPhotos(photos);
+    setChosenPhoto(photos[0]?.uri);
   };
 
   const HeaderRight = () => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Post", {
+          file: chosenPhoto,
+        })
+      }
+    >
       <HeaderRightText>Next</HeaderRightText>
     </TouchableOpacity>
   );
@@ -96,6 +101,7 @@ export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
 
   useEffect(() => {
     getPermissions();
+    console.log("I am working!");
   }, []);
 
   useEffect(() => {

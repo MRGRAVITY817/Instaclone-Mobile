@@ -6,9 +6,10 @@ import { Ionicons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { StatusBar } from "expo-status-bar";
 import { StackScreenProps } from "@react-navigation/stack";
-import { UploadStackScreen } from "../navigators/UploadNav";
 import { Alert, Image } from "react-native";
 import * as MediaLibrary from "expo-media-library";
+import { LoggedInStackScreens } from "../navigators/LoggedInNav";
+import { useIsFocused } from "@react-navigation/core";
 
 const Actions = styled.View`
   flex: 0.35;
@@ -59,7 +60,7 @@ const TakePhotoBtn = styled.TouchableOpacity`
 
 const SliderContainer = styled.View``;
 
-type SelectPhotoProps = StackScreenProps<UploadStackScreen, "Select">;
+type SelectPhotoProps = StackScreenProps<LoggedInStackScreens, "Upload">;
 
 export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const camera = useRef<Camera>();
@@ -73,6 +74,7 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const [cameraType, setCameraType] = useState<"back" | "front">(
     Camera.Constants.Type.back
   );
+
   const getPermissions = async () => {
     const { granted } = await Camera.requestPermissionsAsync();
     setOk(granted);
@@ -82,7 +84,9 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
     if (save) {
       await MediaLibrary.saveToLibraryAsync(takenPhoto);
     }
-    console.log("Will upload", takenPhoto);
+    navigation.navigate("Post", {
+      file: takenPhoto,
+    });
   };
 
   const onUpload = () => {
@@ -138,9 +142,11 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
 
   const onDismiss = () => setTakenPhoto("");
 
+  const isFocused = useIsFocused();
+
   return (
     <Container>
-      <StatusBar hidden={true} />
+      {isFocused ? <StatusBar hidden={true} /> : null}
       {takenPhoto === "" ? (
         <Camera
           type={cameraType}
@@ -150,7 +156,7 @@ export const TakePhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
           ref={camera as LegacyRef<Camera>}
           onCameraReady={onCameraReady}
         >
-          <CloseButton onPress={() => navigation.navigate("Select")}>
+          <CloseButton onPress={() => navigation.navigate("Tabs")}>
             <Ionicons name="close" size={30} color="white" />
           </CloseButton>
         </Camera>
