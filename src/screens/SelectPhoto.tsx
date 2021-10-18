@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../colors";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
-import { UploadStackScreen } from "../navigators/UploadNav";
 import { LoggedInStackScreens } from "../navigators/LoggedInNav";
 
 const Container = styled.View`
