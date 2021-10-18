@@ -53,7 +53,7 @@ export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
   const HeaderRight = () => (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("Post", {
+        navigation.navigate("UploadPhoto", {
           file: chosenPhoto,
         })
       }

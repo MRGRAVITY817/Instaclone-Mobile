@@ -6,6 +6,18 @@ import { colors } from "../colors";
 import { useForm } from "react-hook-form";
 import { StackScreenProps } from "@react-navigation/stack";
 import { DismissKeyboard } from "../components/DismissKeyboard";
+import { gql, useMutation } from "@apollo/client";
+import { FEED_PHOTO } from "../hooks/fragments";
+import { ReactNativeFile } from "apollo-upload-client";
+
+const UPLOAD_PHOTO_MUTATION = gql`
+  mutation UploadPhoto($file: Upload!, $caption: String) {
+    uploadPhoto(file: $file, caption: $caption) {
+      ...FeedPhoto
+    }
+  }
+  ${FEED_PHOTO}
+`;
 
 const Container = styled.View`
   flex: 1;
@@ -35,21 +47,40 @@ const HeaderRightText = styled.Text`
   margin-right: 7px;
 `;
 
-interface PostFormParams {
+interface UploadPhotoFormParams {
   caption: string;
 }
 
-type PostProps = StackScreenProps<LoggedInStackScreens, "Post">;
+type UploadPhotoProps = StackScreenProps<LoggedInStackScreens, "UploadPhoto">;
 
-export const Post: React.FC<PostProps> = ({ route, navigation }) => {
+export const UploadPhoto: React.FC<UploadPhotoProps> = ({
+  route,
+  navigation,
+}) => {
+  const [uploadPhotoMutation, { loading, error }] = useMutation(
+    UPLOAD_PHOTO_MUTATION,
+    {
+      update: (cache, result) => {
+        const {
+          data: { uploadPhoto },
+        } = result;
+        if (uploadPhoto.id) {
+          cache.modify({
+            id: "ROOT_QUERY",
+            fields: {
+              seeFeed(prev) {
+                return [uploadPhoto, ...prev];
+              },
+            },
+          });
+          navigation.navigate("Tabs");
+        }
+      },
+    }
+  );
+
   const HeaderRight = () => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("Post", {
-          file: "",
-        })
-      }
-    >
+    <TouchableOpacity onPress={handleSubmit(onValid)}>
       <HeaderRightText>Next</HeaderRightText>
     </TouchableOpacity>
   );
@@ -62,9 +93,7 @@ export const Post: React.FC<PostProps> = ({ route, navigation }) => {
     />
   );
 
-  const { register, handleSubmit, setValue } = useForm<PostFormParams>();
-
-  console.log(route.params.file);
+  const { register, handleSubmit, setValue } = useForm<UploadPhotoFormParams>();
 
   useEffect(() => {
     register("caption");
@@ -72,14 +101,26 @@ export const Post: React.FC<PostProps> = ({ route, navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: HeaderRightLoading,
-      headerLeft: () => null,
+      headerRight: loading ? HeaderRightLoading : HeaderRight,
+      ...(loading && { headerLeft: () => null }),
     });
   }, []);
 
-  const onValid = ({ caption }: PostFormParams) => {
-    // upload photo & caption to backend
+  const onValid = ({ caption }: UploadPhotoFormParams) => {
+    const file = new ReactNativeFile({
+      uri: route.params.file,
+      name: `1.jpg`,
+      type: "image/jpeg",
+    });
+    uploadPhotoMutation({
+      variables: {
+        caption,
+        file,
+      },
+    });
   };
+
+  console.log(error);
 
   return (
     <DismissKeyboard>

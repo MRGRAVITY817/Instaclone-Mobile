@@ -2,13 +2,13 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TabNav } from "./TabNav";
 import { UploadNav } from "./UploadNav";
-import { Post } from "../screens/Post";
+import { UploadPhoto } from "../screens/UploadPhoto";
 import { Ionicons } from "@expo/vector-icons";
 
 export type LoggedInStackScreens = {
   Tabs: undefined;
   Upload: undefined;
-  Post: { file: string };
+  UploadPhoto: { file: string };
 };
 
 const Stack = createStackNavigator<LoggedInStackScreens>();
@@ -31,9 +31,9 @@ export const LoggedInNav = () => {
         component={UploadNav}
       />
       <Stack.Screen
-        name="Post"
+        name="UploadPhoto"
         options={{
-          title: "Post",
+          title: "Upload Photo",
           headerBackTitleVisible: false,
           headerBackImage: ({ tintColor }) => (
             <Ionicons color={tintColor} name="close" size={28} />
@@ -43,7 +43,7 @@ export const LoggedInNav = () => {
             backgroundColor: "black",
           },
         }}
-        component={Post}
+        component={UploadPhoto}
       />
     </Stack.Navigator>
   );
