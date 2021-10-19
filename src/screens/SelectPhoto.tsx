@@ -100,7 +100,6 @@ export const SelectPhoto: React.FC<SelectPhotoProps> = ({ navigation }) => {
 
   useEffect(() => {
     getPermissions();
-    console.log("I am working!");
   }, []);
 
   useEffect(() => {
